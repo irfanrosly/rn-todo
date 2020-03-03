@@ -1,42 +1,41 @@
-import * as React from "react"
-import { StyleSheet, Text, View } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
-import * as WebBrowser from "expo-web-browser"
-import { RectButton, ScrollView } from "react-native-gesture-handler"
+import React, { useState } from "react"
+import { Container, Content } from "native-base"
+import { useDispatch, useSelector } from "react-redux"
+import AddToDo from "../components/AddTodo"
+import AddToDoButton from "../components/AddToDoButton"
+import ToDoItem from "../components/ToDoItem"
+import ToDoActions from "../redux/toDo"
 
-export default function CompletedListScreen() {
+const CompletedListScreen = () => {
+	const [newToDo, setNewToDo] = useState(false)
+	const todos = useSelector(state => state.toDo.todos)
+	const dispatch = useDispatch()
+
+	saveToDoData = todo => {
+		setNewToDo(false)
+		dispatch(ToDoActions.addToDo(todo))
+	}
+
+	addNewToDo = () => {
+		setNewToDo(!newToDo)
+	}
+
 	return (
-		<ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-			<Text>Completed List Screen</Text>
-		</ScrollView>
+		<Container>
+			<Content>
+				{newToDo && <AddToDo onPress={saveToDoData} onCancel={addNewToDo} />}
+				{todos
+					.filter(function(todo) {
+						return todo.completed
+					})
+					.map((todo, index) => (
+						<ToDoItem key={index} todo={todo} />
+					))}
+			</Content>
+
+			<AddToDoButton onAddNewToDo={addNewToDo} disabled={newToDo} />
+		</Container>
 	)
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fafafa"
-	},
-	contentContainer: {
-		paddingTop: 15
-	},
-	optionIconContainer: {
-		marginRight: 12
-	},
-	option: {
-		backgroundColor: "#fdfdfd",
-		paddingHorizontal: 15,
-		paddingVertical: 15,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderBottomWidth: 0,
-		borderColor: "#ededed"
-	},
-	lastOption: {
-		borderBottomWidth: StyleSheet.hairlineWidth
-	},
-	optionText: {
-		fontSize: 15,
-		alignSelf: "flex-start",
-		marginTop: 1
-	}
-})
+export default CompletedListScreen

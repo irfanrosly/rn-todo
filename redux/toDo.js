@@ -2,8 +2,8 @@ import { createReducer, createActions } from "reduxsauce"
 import Immutable from "seamless-immutable"
 
 const { Types, Creators } = createActions({
-	addToDo: ["title", "completed"],
-	editToDo: ["title", "completed"],
+	addToDo: ["payload"],
+	editToDo: ["payload"],
 	deleteToDo: ["payload"]
 })
 
@@ -16,16 +16,17 @@ const INITIAL_STATE = Immutable({
 
 const addToDo = (state, action) => {
 	return state.merge({
-		todos: [...state.todos, action.todo]
+		todos: [...state.todos, action.payload]
 	})
 }
 
 const editToDo = (state, action) => {
+	console.log(action)
 	let todos = [...state.todos]
 	let indexOfUpdate = todos.findIndex(todo => {
-		return todo.title == action.todo.title
+		return todo.id == action.payload.id
 	})
-	todos[indexOfUpdate] = action.todo
+	todos[indexOfUpdate] = action.payload
 	return state.merge({
 		...state,
 		todos: todos
@@ -35,7 +36,7 @@ const editToDo = (state, action) => {
 const deleteToDo = (state, action) => {
 	return state.merge({
 		todos: state.todos.filter(function(todo) {
-			return todo.title != action.todo.title
+			return todo.id != action.payload.id
 		})
 	})
 }
