@@ -1,13 +1,19 @@
-import React, { useState } from "react"
-import { SafeAreaView, View, ImageBackground } from "react-native"
+import React, { useState, useEffect } from "react"
+import { SafeAreaView, View } from "react-native"
 import { Text, Input, Item, Button } from "native-base"
+import { useDispatch } from "react-redux"
+import AuthActions from "../../redux/auth"
+
 const LoginScreen = ({ navigation }) => {
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
 
+	const dispatch = useDispatch()
+
 	const handleClickLogin = () => {
-		navigation.navigate("Root")
+		dispatch(AuthActions.login({ username, password, navigation }))
 	}
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<View style={{ flex: 0.3 }}></View>

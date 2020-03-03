@@ -21,7 +21,6 @@ const addToDo = (state, action) => {
 }
 
 const editToDo = (state, action) => {
-	console.log(action)
 	let todos = [...state.todos]
 	let indexOfUpdate = todos.findIndex(todo => {
 		return todo.id == action.payload.id

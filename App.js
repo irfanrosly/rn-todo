@@ -8,14 +8,8 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { Provider } from "react-redux"
 import store from "./config/store"
 
-import BottomTabNavigator from "./navigation/BottomTabNavigator"
 import useLinking from "./navigation/useLinking"
-import AuthNavigator from "./navigation/AuthNavigator"
-import DrawerNavigator from "./navigation/DrawerNavigator"
-
-const Stack = createStackNavigator()
-
-let loggedIn = false
+import AppNavigator from "./navigation/AppNavigator"
 
 export default function App(props) {
 	const [isLoadingComplete, setLoadingComplete] = React.useState(false)
@@ -56,16 +50,7 @@ export default function App(props) {
 			<Provider store={store}>
 				<View style={styles.container}>
 					{Platform.OS === "ios" && <StatusBar barStyle='default' />}
-					<NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-						<Stack.Navigator
-							initialRouteName={loggedIn ? "Root" : "Auth"}
-							headerMode='none'
-							screenOptions={{ gestureEnabled: false }}
-						>
-							<Stack.Screen name='Auth' component={AuthNavigator} />
-							<Stack.Screen name='Root' component={DrawerNavigator} />
-						</Stack.Navigator>
-					</NavigationContainer>
+					<AppNavigator />
 				</View>
 			</Provider>
 		)

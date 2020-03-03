@@ -1,6 +1,8 @@
 import React, { useState } from "react"
-import { SafeAreaView, View } from "react-native"
+import { SafeAreaView, View, AsyncStorage } from "react-native"
 import { Text, Input, Item, Button } from "native-base"
+import { useDispatch } from "react-redux"
+import AuthActions from "../../redux/auth"
 
 const SignUpScreen = ({ navigation }) => {
 	const [username, setUsername] = useState("")
@@ -9,10 +11,12 @@ const SignUpScreen = ({ navigation }) => {
 	const [firstName, setFirstName] = useState("")
 	const [lastName, setLastName] = useState("")
 
+	const dispatch = useDispatch()
+
 	const handleClickSignUp = () => {
-		const allFieldFilled = firstName && lastName && username && email && password
-		if (allFieldFilled) alert(`${username} + ${password}`)
-		else alert("tak lengkap")
+		const payload = { firstName, lastName, email, username, password }
+		dispatch(AuthActions.signUp(payload))
+		navigation.goBack()
 	}
 
 	return (
