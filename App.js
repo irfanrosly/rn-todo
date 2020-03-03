@@ -10,8 +10,12 @@ import store from "./config/store"
 
 import BottomTabNavigator from "./navigation/BottomTabNavigator"
 import useLinking from "./navigation/useLinking"
+import AuthNavigator from "./navigation/AuthNavigator"
+import DrawerNavigator from "./navigation/DrawerNavigator"
 
 const Stack = createStackNavigator()
+
+let loggedIn = false
 
 export default function App(props) {
 	const [isLoadingComplete, setLoadingComplete] = React.useState(false)
@@ -53,8 +57,13 @@ export default function App(props) {
 				<View style={styles.container}>
 					{Platform.OS === "ios" && <StatusBar barStyle='default' />}
 					<NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-						<Stack.Navigator>
-							<Stack.Screen name='Root' component={BottomTabNavigator} />
+						<Stack.Navigator
+							initialRouteName={loggedIn ? "Root" : "Auth"}
+							headerMode='none'
+							screenOptions={{ gestureEnabled: false }}
+						>
+							<Stack.Screen name='Auth' component={AuthNavigator} />
+							<Stack.Screen name='Root' component={DrawerNavigator} />
 						</Stack.Navigator>
 					</NavigationContainer>
 				</View>
